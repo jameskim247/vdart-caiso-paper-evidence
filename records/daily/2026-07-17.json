@@ -1,0 +1,11 @@
+{
+ "classification": "hypothetical prospective paper evidence",
+ "execution": "limit-priced simulated DA clearing; not must-clear",
+ "previous_record_digest": "GENESIS",
+ "published_at_utc": "2026-07-16T12:50:02.683529+00:00",
+ "record_date": "2026-07-16",
+ "record_digest": "72541d9dba40605858468e3a30dc45b752f8d2b26210a565190b06e243b8a459",
+ "settlement": "hourly_provisional",
+ "strategy_version": "v1.14",
+ "target_operating_date": "2026-07-17"
+}
