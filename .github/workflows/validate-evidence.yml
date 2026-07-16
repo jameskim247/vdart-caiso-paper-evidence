@@ -1,0 +1,54 @@
+name: validate-evidence
+
+on:
+  schedule:
+    - cron: '30 18 * * *'
+  push:
+    paths:
+      - 'records/daily/**'
+      - 'headline/latest.json'
+  pull_request:
+    paths:
+      - 'records/daily/**'
+      - 'headline/latest.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate public schema and chain
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import datetime as dt
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          expected = {
+              "record_date", "target_operating_date", "published_at_utc",
+              "strategy_version", "execution", "settlement", "record_digest",
+              "previous_record_digest", "classification",
+          }
+          previous = "GENESIS"
+          for path in sorted(Path("records/daily").glob("*.json")):
+              row = json.loads(path.read_text())
+              assert set(row) == expected, (path, sorted(set(row) ^ expected))
+              assert row["target_operating_date"] == path.stem, path
+              assert row["previous_record_digest"] == previous, path
+              assert re.fullmatch(r"[0-9a-f]{64}", row["record_digest"]), path
+              previous = row["record_digest"]
+          if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+              local = dt.datetime.now(dt.timezone.utc).astimezone(
+                  ZoneInfo("America/Los_Angeles"))
+              expected = local.date() + dt.timedelta(days=1)
+              assert (Path("records/daily") / f"{expected}.json").exists(), expected
+          headline = Path("headline/latest.json")
+          if headline.exists():
+              body = headline.read_text().lower()
+              for forbidden in ("node_id", "limit_price", "attempt_id", "payload_sha"):
+                  assert forbidden not in body, forbidden
+          PY
