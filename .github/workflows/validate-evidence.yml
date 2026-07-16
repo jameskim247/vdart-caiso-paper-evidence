@@ -5,6 +5,7 @@ on:
     - cron: '30 18 * * *'
   push:
     paths:
+      - '.github/workflows/validate-evidence.yml'
       - 'records/daily/**'
       - 'headline/latest.json'
   pull_request:
