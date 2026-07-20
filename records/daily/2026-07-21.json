@@ -1,0 +1,11 @@
+{
+ "classification": "hypothetical prospective paper evidence",
+ "execution": "limit-priced simulated DA clearing; not must-clear",
+ "previous_record_digest": "f231b16f1e23895ab32fe4e95ef02d62414f38276ad6b30ec9739e3a9622743d",
+ "published_at_utc": "2026-07-20T13:14:45.484418+00:00",
+ "record_date": "2026-07-20",
+ "record_digest": "7e462cfe6e05d2229a0b15e019ee562f0fb31e33abb7ada6e4ebb5bcf9ea29e1",
+ "settlement": "hourly_provisional",
+ "strategy_version": "v1.14",
+ "target_operating_date": "2026-07-21"
+}
